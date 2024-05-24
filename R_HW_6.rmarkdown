@@ -13,6 +13,7 @@ execute:
   warning: false
 ---
 
+
 # Instructions
 
 1. **Write your name** on the assignment
@@ -65,6 +66,7 @@ To get full credit for this Question you must:
 
 Consider the list of lists below containing basketball player information.
 
+
 ```{r}
 player_info <- list(MJ = list(name = "Michael Jordan",
                               postion = "shooting guard",
@@ -94,12 +96,14 @@ player_info <- list(MJ = list(name = "Michael Jordan",
 ```
 
 
+
 ### Part a (1 point)
 
 Extract the value `8162` (LeBron James points) in 2 different ways:
 
 - using indexing 
 - using names
+
 
 ```{r}
 lebron_points_indexing <- player_info[[2]]$points
@@ -109,11 +113,13 @@ print(lebron_points_names)
 ```
 
 
+
 ### Part b (3 points)
 
 Add a new named element to the end of each player's list called `height`. The heights in inches are as follows: MJ = 78; LJ = 81; KB = 78; KA = 86; SO = 85.
 
 Print the `player_info` list to prove you were successful.
+
 
 ```{r}
 player_info$MJ$height <- 78
@@ -124,6 +130,7 @@ player_info$SO$height <- 85
 print(player_info)
 
 ```
+
 
 
 ### Part c (3 points)
@@ -140,6 +147,7 @@ Hint: initialize an empty list
 
 Note: this must still run correctly even if the values were to change or if another player were added to the list or if the player order changed.
 
+
 ```{r}
 points_per_game <- list()
 for (player in names(player_info)) {
@@ -151,11 +159,13 @@ print(points_per_game)
 ```
 
 
+
 ### Part d (1 point)
 
 Use the list created in Part c and an appropriate apply function to round each value to two decimal places.
 
 Store the output as a vector and print the results.
+
 
 ```{r}
 results <- sapply(points_per_game, round, 2)
@@ -163,9 +173,11 @@ results
 ```
 
 
+
 ## Question 3 (3 points)
 
 Consider the matrix `mat_rand` of random numbers below.
+
 
 ```{r}
 rand_num <- c(sample(10:100, 10), sample(100:999, 10), sample(1000:2000, 10))
@@ -173,11 +185,13 @@ rand_num <- c(sample(10:100, 10), sample(100:999, 10), sample(1000:2000, 10))
 mat_rand <- matrix(sample(rand_num, 30), ncol = 5)
 ```
 
+
 Use an appropriate apply function to round values with 2 digits to the nearest tens, values with 3 digits to the nearest hundreds, and 4 digits to the nearest thousands.
 
 ie: 91 rounds to 90; 173 rounds to 200; 1450 rounds to 1000
 
 Hint: use `MARGIN = 1:2` to apply the function to each value instead of only a row/col.
+
 
 ```{r}
 rounder <- function(x){
@@ -194,9 +208,11 @@ mat_rand_1
 ```
 
 
+
 ## Question 4 (9 points)
 
 Run the below code chunk to load a data frame named `max_temps` into your Environment. May need to install `tidyverse` and `janitor` first in order for this to run. You can install packages by clicking on the **Packages** tab in the bottom right pane followed by clicking **Install**.
+
 
 ```{r}
 library(tidyverse)
@@ -209,14 +225,20 @@ max_temps <- read_tsv("state_max_temps.tsv") |>
   janitor::clean_names()
 ```
 
+
 ### Part a (2 points)
 
 Calculate the average temperature for each month across the whole data frame (using the data for all three states together).
 
+
 ```{r}
-month_avg_temps <- apply(max_temps[,-c(1:2)], 2, mean)
-print(month_avg_temps)
+month_columns <- max_temps %>%
+  select(jan:dec)
+average_month_temp <- apply(month_columns, 2, mean)
+
+print(average_month_temp)
 ```
+
 
 
 ### Part b (2 points)
@@ -229,12 +251,17 @@ Create three new data frames by slicing the data by state.
 
 No need to print any output here.
 
+
 ```{r}
-ohio_data <- max_temps[max_temps$state == "OH", ]
-colorado_data <- max_temps[max_temps$state == "CO",]
-virginia_data <- max_temps[max_temps$state == "VA",]
+split_state_data <- split(max_temps, max_temps$state)
+
+colorado_split <- split(split_state_data, split_state_data$CO)
+ohio_split <- split(split_state_data, split_state_data$OH)
+virginia_split <- split(split_state_data, split_state_data$VA)
+
 
 ```
+
 
 
 ### Part c (5 points)
@@ -253,17 +280,11 @@ Example (this is NOT the answer just an example of what goes in the {}):
 
 Note: This code should still run successfully even if the numbers were to change.
 
+
 ```{r}
-annual_medians <- apply(colorado_data[,-c(1:2)], 1, median)
-top_1 <- which.max(annual_medians)
-bottom_1 <- which.min(annual_medians)
-
-print(paste0("The maximum median temperature of ", max(annual_medians),
-" occured in ", colorado_data$year[top_1], " and the minimum median annual temperature of ", min(annual_medians), " occured in ",
-colorado_data$year[bottom_1], "."))
-
 
 ```
+
 
 
 ## Question 5 (5 points)
@@ -273,6 +294,7 @@ Write a recursive function that calculates the sum of the digits in a number.
 Example: The number 312 would return 6 (3 + 1 + 2)
 
 Run your function with 935068.
+
 
 ```{r}
 
